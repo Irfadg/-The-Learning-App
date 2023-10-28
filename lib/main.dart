@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:learning_app/counter_bloc/app_bloc.dart';
-import 'package:learning_app/counter_bloc/app_event.dart';
 
-import 'counter_bloc/app_state.dart';
+
+import 'counter/counter_bloc.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context)=> AppBloc(),
+      create: (context)=> CounterBloc(),
       child: MaterialApp(
         title: 'Focused Learning App',
         theme: ThemeData(
@@ -39,14 +39,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  
 
-  void _incrementCounter() {
-    print("it clicking");
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: BlocBuilder<AppBloc,AppState>(
+        child: BlocBuilder<CounterBloc,CounterState>(
           builder: (context,state) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   'You have pushed the button this many times:',
                 ),
                 Text(
-                  "${BlocProvider.of<AppBloc>(context).state.counter}",
+                  "${BlocProvider.of<CounterBloc>(context).state.count}",
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ],
@@ -74,10 +68,20 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed:() => BlocProvider.of<AppBloc>(context).add(Increment()) ,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            onPressed:() => BlocProvider.of<CounterBloc>(context).add(const Increment()) ,
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+             FloatingActionButton(
+            onPressed:() => BlocProvider.of<CounterBloc>(context).add(const Decrement()) ,
+            tooltip: 'Increment',
+            child: const Icon(Icons.deblur),
+          ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
